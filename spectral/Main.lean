@@ -31,3 +31,17 @@ noncomputable def adjointFunctional (D : Submodule ℂ H₁) (hD : Dense (D : Se
 noncomputable def hilbertAdjoint (D : Submodule ℂ H₁) (hD : Dense (D : Set H₁))
     (T : D →ₗ[ℂ] H₂) (y : H₂) (hy : y ∈ hilbertAdjointDomain D T) : H₁ :=
   (InnerProductSpace.toDual ℂ H₁).symm (adjointFunctional D hD T y hy)
+
+/-- The operator U : H₁ × H₂ → H₂ × H₁, (x, y) ↦ (y, -x) -/
+def operatorU : (H₁ × H₂) →ₗ[ℂ] (H₂ × H₁) where
+  toFun := fun p => (p.2, -p.1)
+  map_add' := fun p q => by simp [add_comm]
+  map_smul' := fun m p => by simp
+
+/-- Lemma 2.3: the graph of T* as an orthogonal complement -/
+def adjointGraph (D : Submodule ℂ H₁) (T : D →ₗ[ℂ] H₂) : Submodule ℂ (H₂ × H₁) where
+  carrier := {p : H₂ × H₁ | ∀ x : D,
+    inner (𝕜 := ℂ) (T x) p.1 + inner (𝕜 := ℂ) p.2 x = 0}
+  add_mem' := by intro p q hp hq x; simp [hp x, hq x, inner_add_right]
+  zero_mem' := by simp
+  smul_mem' := by intro m p hp x; simp [hp x, inner_smul_right]
