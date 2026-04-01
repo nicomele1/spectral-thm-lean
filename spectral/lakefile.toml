@@ -1,0 +1,15 @@
+name = "spectral"
+version = "0.1.0"
+defaultTargets = ["spectral"]
+
+[[lean_lib]]
+name = "Spectral"
+
+[[lean_exe]]
+name = "spectral"
+root = "Main"
+
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4"
+rev = "master"
